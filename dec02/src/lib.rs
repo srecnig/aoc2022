@@ -86,14 +86,14 @@ mod tests {
     #[test]
     fn can_build_game() {
         let game1 = build_game("A Y");
-        assert_eq!(Shape::Rock, game1.my);
-        assert_eq!(Shape::Paper, game1.opponent);
+        assert_eq!(Shape::Rock, game1.opponent);
+        assert_eq!(Shape::Paper, game1.my);
         let game2 = build_game("B X");
-        assert_eq!(Shape::Paper, game2.my);
-        assert_eq!(Shape::Rock, game2.opponent);
+        assert_eq!(Shape::Paper, game2.opponent);
+        assert_eq!(Shape::Rock, game2.my);
         let game3 = build_game("C Z");
-        assert_eq!(Shape::Scissors, game3.my);
         assert_eq!(Shape::Scissors, game3.opponent);
+        assert_eq!(Shape::Scissors, game3.my);
     }
 
     #[test]
