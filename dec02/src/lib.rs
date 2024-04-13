@@ -1,7 +1,18 @@
 pub fn build_game(definition: &str) -> Game {
     let shapes: Vec<&str> = definition.split_whitespace().collect();
-    let my_shape = build_shape(shapes[1]).unwrap();
     let opponent_shape = build_shape(shapes[0]).unwrap();
+    let my_shape = build_shape(shapes[1]).unwrap();
+    Game {
+        my: my_shape,
+        opponent: opponent_shape,
+    }
+}
+
+pub fn build_predetermined_game(definition: &str) -> Game {
+    let strategy: Vec<&str> = definition.split_whitespace().collect();
+    let opponent_shape = build_shape(strategy[0]).unwrap();
+    let expected_result = build_result(strategy[1]).unwrap();
+    let my_shape = build_shape_by_result(&opponent_shape, &expected_result);
     Game {
         my: my_shape,
         opponent: opponent_shape,
@@ -14,6 +25,36 @@ fn build_shape(symbol: &str) -> Option<Shape> {
         "Y" | "B" => Some(Shape::Paper),
         "Z" | "C" => Some(Shape::Scissors),
         _ => None,
+    }
+}
+
+fn build_result(symbol: &str) -> Option<Result> {
+    match symbol {
+        "X" => Some(Result::Loss),
+        "Y" => Some(Result::Draw),
+        "Z" => Some(Result::Win),
+        _ => None,
+    }
+}
+
+fn build_shape_by_result(shape: &Shape, result: &Result) -> Shape {
+    // result is from the perspective of the returned shape
+    match shape {
+        Shape::Rock => match result {
+            Result::Loss => Shape::Scissors,
+            Result::Draw => Shape::Rock,
+            Result::Win => Shape::Paper,
+        },
+        Shape::Paper => match result {
+            Result::Loss => Shape::Rock,
+            Result::Draw => Shape::Paper,
+            Result::Win => Shape::Scissors,
+        },
+        Shape::Scissors => match result {
+            Result::Loss => Shape::Paper,
+            Result::Draw => Shape::Scissors,
+            Result::Win => Shape::Rock,
+        },
     }
 }
 
@@ -94,6 +135,19 @@ mod tests {
         let game3 = build_game("C Z");
         assert_eq!(Shape::Scissors, game3.opponent);
         assert_eq!(Shape::Scissors, game3.my);
+    }
+
+    #[test]
+    fn can_build_predetermined_game() {
+        let game1 = build_predetermined_game("A Y");
+        assert_eq!(Shape::Rock, game1.opponent);
+        assert_eq!(Shape::Rock, game1.my);
+        let game2 = build_predetermined_game("B X");
+        assert_eq!(Shape::Paper, game2.opponent);
+        assert_eq!(Shape::Rock, game2.my);
+        let game3 = build_predetermined_game("C Z");
+        assert_eq!(Shape::Scissors, game3.opponent);
+        assert_eq!(Shape::Rock, game3.my);
     }
 
     #[test]
