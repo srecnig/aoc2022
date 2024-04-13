@@ -1,1 +1,4 @@
-late to the party. aoc22 with rust. not sure how far i'll make it, though.
+[![Rust](https://github.com/srecnig/aoc22/actions/workflows/rust.yml/badge.svg)](https://github.com/srecnig/aoc22/actions/workflows/rust.yml)
+
+# advent of code in summer one year too late
+late to the party. but learning rust by doing aoc22. 
