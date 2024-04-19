@@ -72,7 +72,6 @@ impl Stack {
 
 pub fn parse_stacks(lines: Vec<&str>) -> Vec<Stack> {
     // // stacks
-    // let lines_before_empty_line: Vec<&str> = parts[0].lines().collect();
     let mut stacks: Vec<Stack> = Vec::new();
 
     // first, get the index of all the stacks and create the empty stacks
@@ -91,7 +90,6 @@ pub fn parse_stacks(lines: Vec<&str>) -> Vec<Stack> {
 
     // now fill the stacks backwards
     for line in lines.iter().rev().skip(1) {
-        println!("{}", line);
         for (stack_index, &crate_index) in positions.iter().enumerate() {
             let crate_symbol = line.chars().nth(crate_index);
             match crate_symbol {
@@ -123,42 +121,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn can_do_somthing() {
-        // not a real test, just for debugging
-        let mut stack1 = Stack {
-            number: 1,
-            crates: vec![Crate { symbol: 'Z' }, Crate { symbol: 'N' }],
-        };
-
-        let stack2 = Stack {
-            number: 2,
-            crates: vec![
-                Crate { symbol: 'M' },
-                Crate { symbol: 'C' },
-                Crate { symbol: 'D' },
-            ],
-        };
-
-        let mut stack3 = Stack {
-            number: 3,
-            crates: vec![Crate { symbol: 'P' }],
-        };
-
-        println!("before move");
-        println!("{}", stack1);
-        println!("{}", stack2);
-        println!("{}", stack3);
-
-        let mut popped = stack1.pop(2);
-        stack3.push(&mut popped);
-
-        println!("after move");
-        println!("{}", stack1);
-        println!("{}", stack2);
-        println!("{}", stack3);
-    }
-
-    #[test]
     fn can_parse_command() {
         let command_str = "move 3 from 1 to 2";
         let command = parse_command(command_str);
@@ -173,7 +135,6 @@ mod tests {
     [N] [C]
 [Z] [M] [P]
  1   2   3"#;
-        println!("geilo!!");
         let stacks = parse_stacks(stack_description.lines().collect());
         assert_eq!("1: [Z]", &stacks[0].to_string());
         assert_eq!("2: [M] [N] [D]", &stacks[1].to_string());

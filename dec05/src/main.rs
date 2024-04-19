@@ -1,8 +1,8 @@
-use dec05::{parse_command, parse_stacks, Command, Crate};
+use dec05::{parse_command, parse_stacks, Command};
 use std::fs;
 
 fn main() {
-    let input = fs::read_to_string("input1-test.txt").expect("Failed to read input! Wat?1");
+    let input = fs::read_to_string("input1.txt").expect("Failed to read input! Wat?1");
     let parts: Vec<&str> = input.splitn(2, "\n\n").collect();
 
     // stack
@@ -17,7 +17,6 @@ fn main() {
         .collect();
 
     for command in &commands {
-        println!("{}", command);
         let mut popped = stacks[command.source as usize - 1].pop(command.count);
         stacks[command.destination as usize - 1].push(&mut popped);
     }
