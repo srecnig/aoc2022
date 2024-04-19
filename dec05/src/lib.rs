@@ -65,12 +65,17 @@ impl Stack {
         self.crates.append(push);
     }
 
+    pub fn push_reversed(&mut self, push: &mut Vec<Crate>) {
+        push.reverse();
+        self.crates.append(push);
+    }
+
     pub fn top_crate(&self) -> char {
         self.crates.last().unwrap().symbol
     }
 }
 
-pub fn parse_stacks(lines: Vec<&str>) -> Vec<Stack> {
+pub fn parse_stacks(lines: &Vec<&str>) -> Vec<Stack> {
     // // stacks
     let mut stacks: Vec<Stack> = Vec::new();
 
@@ -135,7 +140,7 @@ mod tests {
     [N] [C]
 [Z] [M] [P]
  1   2   3"#;
-        let stacks = parse_stacks(stack_description.lines().collect());
+        let stacks = parse_stacks(&stack_description.lines().collect());
         assert_eq!("1: [Z]", &stacks[0].to_string());
         assert_eq!("2: [M] [N] [D]", &stacks[1].to_string());
         assert_eq!("3: [P] [C]", &stacks[2].to_string());
@@ -167,6 +172,18 @@ mod tests {
         stack.push(&mut to_push);
         assert_eq!('X', stack.crates[0].symbol);
         assert_eq!('A', stack.crates[1].symbol);
+    }
+
+    #[test]
+    fn can_push_to_stack_in_reverse() {
+        let mut stack = Stack {
+            number: 1,
+            crates: vec![],
+        };
+        let mut to_push = vec![Crate { symbol: 'X' }, Crate { symbol: 'A' }];
+        stack.push_reversed(&mut to_push);
+        assert_eq!('A', stack.crates[0].symbol);
+        assert_eq!('X', stack.crates[1].symbol);
     }
 
     #[test]
