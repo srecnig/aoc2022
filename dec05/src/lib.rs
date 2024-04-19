@@ -1,5 +1,30 @@
 use std::fmt;
 
+struct Command {
+    source: i32,
+    destination: i32,
+    count: i32,
+}
+
+fn parse_command(command: &str) -> Command {
+    let parts: Vec<&str> = command.split("from").collect(); // move 1 from 2 to 1
+    let move_part = parts[0]; // move 1
+    let location_part = parts[1]; // 2 to 1
+
+    let count_str: Vec<&str> = move_part.trim().split_whitespace().collect();
+    let count = count_str[1].parse::<i32>().unwrap();
+    let locations: Vec<i32> = location_part
+        .trim()
+        .split("to")
+        .map(|l| l.trim().parse::<i32>().unwrap())
+        .collect();
+    Command {
+        source: locations[0],
+        destination: locations[1],
+        count,
+    }
+}
+
 struct Stack {
     number: i32,
     crates: Vec<Crate>,
@@ -47,6 +72,7 @@ mod tests {
 
     #[test]
     fn can_do_somthing() {
+        // not a real test, just for debugging
         let mut stack1 = Stack {
             number: 1,
             crates: vec![Crate { symbol: 'Z' }, Crate { symbol: 'N' }],
@@ -81,6 +107,15 @@ mod tests {
     }
 
     #[test]
+    fn can_parse_command() {
+        let command_str = "move 3 from 1 to 2";
+        let command = parse_command(command_str);
+        assert_eq!(3, command.count);
+        assert_eq!(1, command.source);
+        assert_eq!(2, command.destination);
+    }
+
+    #[test]
     fn can_pop_from_stack() {
         let mut stack = Stack {
             number: 1,
@@ -108,17 +143,3 @@ mod tests {
         assert_eq!('A', stack.crates[1].symbol);
     }
 }
-
-// let lines: Vec<Vec<&str>> = stack_map.lines().map(|line| line.split_whitespace().collect()).collect();
-// let transposed: Vec<Vec<&str>> = (0..lines[0].len()).map(|i| lines.iter().map(|line| line[i]).collect()).collect();
-// transposed.into_iter().map(|row| {
-//     row.iter().map(|&s| s.chars().next().unwrap()).collect()
-// }).collect()
-
-// println!("{}", stack_map);
-// println!("{}", transposed);
-
-// pub fn parse_stacks(stack_map: &str) -> bool {
-//     // let's do that later
-//     return false;
-// }
